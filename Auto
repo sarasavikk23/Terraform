@@ -1,0 +1,24 @@
+tasks:
+    - name: Execute the script to get the URL
+      script: /path/to/get_url.sh
+      register: script_output
+
+    - name: Set the fact for the extracted URL
+      set_fact:
+        extracted_url: "{{ script_output.stdout }}"
+
+---
+- name: Extract URL from script output
+  hosts: your_target_hosts
+  gather_facts: no
+  vars:
+    script_path: "./scripts/extract_url.sh"
+
+  tasks:
+    - name: Execute URL extraction script
+      script: "{{ script_path }}"
+      register: script_output
+
+    - name: Display the extracted URL
+      debug:
+        msg: "The extracted URL is: {{ script_output.stdout }}"
